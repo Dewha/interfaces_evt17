@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">esWallet</string>
+    <string name="hello">Добро пожаловать!</string>
+    <string name="auth">Авторизация</string>
+    <string name="login">Имя пользователя</string>
+    <string name="password">Пароль</string>
+    <string name="singin">Войти</string>
+    <string name="signup">Регистрация</string>
+    <string name="signout">Выйти</string>
+</resources>
