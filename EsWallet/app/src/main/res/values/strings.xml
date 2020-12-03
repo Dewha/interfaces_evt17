@@ -2,9 +2,18 @@
     <string name="app_name">esWallet</string>
     <string name="hello">Добро пожаловать!</string>
     <string name="auth">Авторизация</string>
-    <string name="login">Имя пользователя</string>
+    <string name="reg">Регистрация</string>
+    <string name="login">Логин</string>
+    <string name="username">Имя</string>
     <string name="password">Пароль</string>
-    <string name="singin">Войти</string>
-    <string name="signup">Регистрация</string>
-    <string name="signout">Выйти</string>
+    <string name="confirm_password">Подтвердите пароль</string>
+    <string name="sign_in">Войти</string>
+    <string name="sign_up">Зарегистрироваться</string>
+    <string name="sign_out">Выйти</string>
+    <string name="already_have_account">Уже зарегистрированы? Войти</string>
+    <string name="error_empty_field">Данное поле должно быть заполнено</string>
+    <string name="error_no_white_spaces">Пробелы не допускаются</string>
+    <string name="error_invalid_email">Некорректный email</string>
+    <string name="error_weak_password">Пароль слишком простой</string>
+    <string name="error_password_are_not_match">Пароль слишком простой</string>
 </resources>
