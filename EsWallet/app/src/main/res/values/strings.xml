@@ -7,13 +7,25 @@
     <string name="username">Имя</string>
     <string name="password">Пароль</string>
     <string name="confirm_password">Подтвердите пароль</string>
-    <string name="sign_in">Войти</string>
+    <string name="log_in">Войти</string>
     <string name="sign_up">Зарегистрироваться</string>
-    <string name="sign_out">Выйти</string>
+    <string name="logout">Выйти</string>
+    <string name="costs">Расходы</string>
+    <string name="income">Доходы</string>
+    <string name="day">День</string>
+    <string name="week">Неделя</string>
+    <string name="month">Месяц</string>
+    <string name="year">Год</string>
     <string name="already_have_account">Уже зарегистрированы? Войти</string>
     <string name="error_empty_field">Данное поле должно быть заполнено</string>
     <string name="error_no_white_spaces">Пробелы не допускаются</string>
     <string name="error_invalid_email">Некорректный email</string>
     <string name="error_weak_password">Пароль слишком простой</string>
     <string name="error_password_are_not_match">Пароль слишком простой</string>
+    <string name="home">Главная</string>
+    <string name="profile">Профиль</string>
+    <string name="about">О программе</string>
+    <string name="remainder">Остаток</string>
+    <string name="total">Всего</string>
+
 </resources>

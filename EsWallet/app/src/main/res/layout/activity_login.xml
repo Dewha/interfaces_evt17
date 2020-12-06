@@ -32,6 +32,14 @@
 
     </androidx.cardview.widget.CardView>
 
+   <!-- <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+
+    </ScrollView> -->
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -94,7 +102,6 @@
                     android:inputType="textPassword"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-
             <Button
                 android:id="@+id/btn_auth"
                 android:layout_width="match_parent"
@@ -102,7 +109,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
                 android:background="@color/coal"
-                android:text="@string/sign_in"
+                android:text="@string/log_in"
                 android:textColor="@color/bone"
                 app:backgroundTint="@color/coal" />
 
@@ -119,7 +126,6 @@
         </LinearLayout>
 
     </LinearLayout>
-
 
 
 </LinearLayout>

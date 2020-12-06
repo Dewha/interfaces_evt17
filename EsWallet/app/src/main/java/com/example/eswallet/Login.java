@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputLayout;
 
-public class Login extends AppCompatActivity {
+public class Login extends AppCompatActivity implements View.OnClickListener {
 
     Button btn_auth, btn_signup;
     ImageView image;
@@ -42,28 +42,8 @@ public class Login extends AppCompatActivity {
         topBar = findViewById(R.id.cv_top_bar);
 
         //events
-        View.OnClickListener onSignUpClick = v -> {
-            Intent intent = new Intent(Login.this, SignUp.class);
-            Pair[] pairs = new Pair[8];
-            pairs[0] = new Pair<View, String>(image, "logo_image");
-            pairs[1] = new Pair<View, String>(hello, "logo_text");
-            pairs[2] = new Pair<View, String>(desc, "logo_desc");
-            pairs[3] = new Pair<View, String>(login, "trans_login");
-            pairs[4] = new Pair<View, String>(pass, "trans_pass");
-            pairs[5] = new Pair<View, String>(btn_auth, "trans_go");
-            pairs[6] = new Pair<View, String>(btn_signup, "trans_next");
-            pairs[7] = new Pair<View, String>(topBar, "trans_top_bar");
-
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(Login.this , pairs);
-                startActivity(intent, options.toBundle());
-            }
-        };
-
-        View.OnClickListener onAuthClick = v -> startActivity(new Intent(Login.this, UserProfile.class));
-
-        btn_signup.setOnClickListener(onSignUpClick);
-        btn_auth.setOnClickListener(onAuthClick);
+        btn_signup.setOnClickListener(this);
+        btn_auth.setOnClickListener(this);
     }
 
     @Override
@@ -72,5 +52,38 @@ public class Login extends AppCompatActivity {
         startMain.addCategory(Intent.CATEGORY_HOME);
         startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(startMain);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_signup : {
+                Intent intent = new Intent(Login.this, SignUp.class);
+                Pair[] pairs = new Pair[8];
+                pairs[0] = new Pair<View, String>(image, "logo_image");
+                pairs[1] = new Pair<View, String>(hello, "logo_text");
+                pairs[2] = new Pair<View, String>(desc, "logo_desc");
+                pairs[3] = new Pair<View, String>(login, "trans_login");
+                pairs[4] = new Pair<View, String>(pass, "trans_pass");
+                pairs[5] = new Pair<View, String>(btn_auth, "trans_go");
+                pairs[6] = new Pair<View, String>(btn_signup, "trans_next");
+                pairs[7] = new Pair<View, String>(topBar, "trans_top_bar");
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(Login.this , pairs);
+                    startActivity(intent, options.toBundle());
+                }
+            } break;
+            case R.id.btn_auth : {
+                //TODO: добавить код авторизации
+                Intent intent = new Intent(Login.this, Dashboard.class);
+                Pair[] pairs = new Pair[2];
+                pairs[0] = new Pair<View, String>(topBar, "trans_top_bar");
+                pairs[1] = new Pair<View, String>(image, "logo_image");
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(Login.this , pairs);
+                    startActivity(intent, options.toBundle());
+                }
+            } break;
+        }
     }
 }

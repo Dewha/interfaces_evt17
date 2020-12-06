@@ -9,10 +9,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.EsWallet">
-        <activity android:name=".UserProfile"></activity>
+        <activity android:name=".About"></activity>
+        <activity android:name=".UserProfile" />
         <activity android:name=".SignUp" />
         <activity android:name=".Login" />
-        <activity android:name=".Dashboard" />
+        <activity
+            android:name=".Dashboard"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

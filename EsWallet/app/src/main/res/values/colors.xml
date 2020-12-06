@@ -8,6 +8,8 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="bone">#F8F1E5</color>
+    <color name="bone_transparent">#77F8F1E5</color>
     <color name="sunlight">#F9BA32</color>
     <color name="coal">#2F3131</color>
+    <color name="coal_transparent">#772F3131</color>
 </resources>

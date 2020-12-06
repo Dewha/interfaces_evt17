@@ -8,18 +8,6 @@
     android:orientation="vertical"
     android:background="@color/bone">
 
-  <!--  <ImageView
-        android:id="@+id/logo_small"
-        android:layout_width="250dp"
-        android:layout_height="200dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="-120dp"
-        android:layout_marginBottom="11dp"
-        android:src="@drawable/coin"
-        android:transitionName="logo_image" />
--->
-
-
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_top_bar"
         android:layout_width="match_parent"
@@ -42,114 +30,119 @@
 
     </androidx.cardview.widget.CardView>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@color/bone"
-        android:padding="20dp">
-        <TextView
-            android:id="@+id/tv_hello"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="casual"
-            android:text="@string/hello"
-            android:textColor="@color/coal"
-            android:textSize="30sp"
-            android:textStyle="bold"
-            android:transitionName="logo_text"/>
-        <TextView
-            android:id="@+id/tv_desc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="casual"
-            android:text="@string/reg"
-            android:textColor="@color/coal"
-            android:textSize="14sp"
-            android:layout_marginTop="10sp"
-            android:transitionName="logo_desc"/>
+        android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            android:orientation="vertical">
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/auth_login"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@color/bone"
+            android:padding="20dp">
+            <TextView
+                android:id="@+id/tv_hello"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="casual"
+                android:text="@string/hello"
+                android:textColor="@color/coal"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:transitionName="logo_text"/>
+            <TextView
+                android:id="@+id/tv_desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="casual"
+                android:text="@string/reg"
+                android:textColor="@color/coal"
+                android:textSize="14sp"
+                android:layout_marginTop="10sp"
+                android:transitionName="logo_desc"/>
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/login"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-                <com.google.android.material.textfield.TextInputEditText
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:orientation="vertical">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/auth_login"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"
-                    android:transitionName="trans_login"/>
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:hint="@string/login"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textEmailAddress"
+                        android:transitionName="trans_login"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/auth_username"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/username"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-                <com.google.android.material.textfield.TextInputEditText
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/auth_username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"/>
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:hint="@string/username"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="text"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/auth_password1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/password"
-                app:passwordToggleEnabled="true"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-                <com.google.android.material.textfield.TextInputEditText
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/auth_password1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:transitionName="trans_password"
-                    android:inputType="textPassword"/>
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:hint="@string/password"
+                    app:passwordToggleEnabled="true"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:transitionName="trans_password"
+                        android:inputType="textPassword"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/auth_password2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/confirm_password"
-                app:passwordToggleEnabled="true"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-                <com.google.android.material.textfield.TextInputEditText
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/auth_password2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPassword"/>
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:hint="@string/confirm_password"
+                    app:passwordToggleEnabled="true"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPassword"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <Button
-                android:id="@+id/btn_auth"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:background="@color/coal"
-                android:text="@string/sign_up"
-                android:textColor="@color/bone"
-                app:backgroundTint="@color/coal" />
+                <Button
+                    android:id="@+id/btn_auth"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="@color/coal"
+                    android:text="@string/sign_up"
+                    android:textColor="@color/bone"
+                    app:backgroundTint="@color/coal" />
 
-            <Button
-                android:id="@+id/btn_alreadyhaveaccount"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:background="#00000000"
-                android:text="@string/already_have_account"
-                android:textColor="@color/coal" />
+                <Button
+                    android:id="@+id/btn_alreadyhaveaccount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:background="#00000000"
+                    android:text="@string/already_have_account"
+                    android:textColor="@color/coal" />
 
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+    </ScrollView>
+
 
 
 </LinearLayout>
