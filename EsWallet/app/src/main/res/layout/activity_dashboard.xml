@@ -7,7 +7,7 @@
     tools:context=".Dashboard"
     android:id="@+id/drawer_layout"
     android:fitsSystemWindows="true"
-    tools:openDrawer="left">
+    tools:openDrawer="right">
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
@@ -45,7 +45,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
-                    android:background="@mipmap/ic_menu" />
+                    android:background="@mipmap/ic_menu"/>
 
                 <TextView
                     android:id="@+id/tv_remainder_hint"
@@ -204,34 +204,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="10dp"
-            android:paddingBottom="10dp">
+            android:paddingBottom="5dp">
 
-            <TextView
-                android:id="@+id/tv_date"
+            <Button
+                android:id="@+id/btn_date"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:text="01.02.05"
-                android:textColor="@color/coal_transparent" />
-
-            <ImageButton
-                android:id="@+id/previous_date"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_toLeftOf="@+id/tv_date"
-                android:alpha="0.3"
-                android:background="@mipmap/ic_previous" />
-
-            <ImageButton
-                android:id="@+id/next_date"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_toRightOf="@+id/tv_date"
-                android:alpha="0.3"
-                android:background="@mipmap/ic_next" />
+                android:layout_height="50dp"
+                android:background="#00000000"
+                android:textSize="16sp"
+                android:textColor="@color/coal"
+                android:alpha="0.7"
+                android:layout_centerHorizontal="true"/>
 
         </RelativeLayout>
 

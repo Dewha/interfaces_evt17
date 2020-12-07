@@ -8,6 +8,7 @@
     android:orientation="vertical"
     android:background="@color/bone">
 
+    <!-- top bar -->
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="170dp"
@@ -37,7 +38,6 @@
                 android:id="@+id/tv_username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="username"
                 android:textColor="@color/bone"
                 android:textSize="26sp"
                 android:layout_toRightOf="@+id/iv_profile"
@@ -45,9 +45,9 @@
                 android:layout_marginLeft="10dp"/>
 
             <TextView
+                android:id="@+id/tv_login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="username"
                 android:textColor="@color/bone"
                 android:textSize="14sp"
                 android:layout_toRightOf="@+id/iv_profile"
@@ -58,6 +58,7 @@
 
     </androidx.cardview.widget.CardView>
 
+    <!-- content -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -107,6 +108,7 @@
 
     </LinearLayout>
 
+    <!-- logout button -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

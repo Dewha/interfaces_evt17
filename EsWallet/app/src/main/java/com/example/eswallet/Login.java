@@ -1,5 +1,6 @@
 package com.example.eswallet;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
@@ -7,6 +8,7 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsManager;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.view.WindowManager;
@@ -15,6 +17,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 public class Login extends AppCompatActivity implements View.OnClickListener {
 
@@ -74,16 +82,93 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 }
             } break;
             case R.id.btn_auth : {
-                //TODO: добавить код авторизации
-                Intent intent = new Intent(Login.this, Dashboard.class);
-                Pair[] pairs = new Pair[2];
-                pairs[0] = new Pair<View, String>(topBar, "trans_top_bar");
-                pairs[1] = new Pair<View, String>(image, "logo_image");
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(Login.this , pairs);
-                    startActivity(intent, options.toBundle());
-                }
+                loginUser();
             } break;
         }
+    }
+    //validate login data
+    private Boolean validateLogin(TextInputLayout login) {
+        String value = login.getEditText().getText().toString();
+        String noWhiteSpaces = "(?=\\S+$)";
+        if (value.isEmpty()) {
+            login.setError(getString(R.string.error_empty_field));
+            return false;
+        } else if (value.matches(noWhiteSpaces)) {
+            login.setError(getString(R.string.error_no_white_spaces));
+            return false;
+        } else if (value.length()>15) {
+            login.setError(getString(R.string.error_too_long));
+            return false;
+        } else {
+            login.setError(null);
+            login.setErrorEnabled(false);
+            return true;
+        }
+    }
+
+    private Boolean validatePass(TextInputLayout pass) {
+        String value = pass.getEditText().getText().toString();
+        if (value.isEmpty()) {
+            pass.setError(getString(R.string.error_empty_field));
+            return false;
+        } else {
+            pass.setError(null);
+            pass.setErrorEnabled(false);
+            return true;
+        }
+    }
+
+    //authorization
+    private void loginUser() {
+        if (validateLogin(login) & validatePass(pass)) {
+            String userEnteredLogin = login.getEditText().getText().toString().trim();
+            String userEnteredPassword = pass.getEditText().getText().toString().trim();
+            DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users");
+            Query checkUser = reference.orderByChild("login").equalTo(userEnteredLogin);
+            checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        login.setError(null);
+                        login.setErrorEnabled(false);
+                        String passFromDB = snapshot.child(userEnteredLogin).child("password").getValue(String.class);
+                        if (passFromDB.equals(userEnteredPassword)) {
+                            pass.setError(null);
+                            pass.setErrorEnabled(false);
+
+                            //collect data from db to variables
+                            String loginFromDB = snapshot.child(userEnteredLogin).child("login").getValue(String.class);
+                            String nameFromDB = snapshot.child(userEnteredLogin).child("name").getValue(String.class);
+                            String secondNameFromDB = snapshot.child(userEnteredLogin).child("secondName").getValue(String.class);
+
+                            //start new activity
+                            Intent intent = new Intent(Login.this, Dashboard.class);
+                            intent.putExtra("login", loginFromDB);
+                            intent.putExtra("name", nameFromDB);
+                            intent.putExtra("second_name", secondNameFromDB);
+
+                            Pair[] pairs = new Pair[2];
+                            pairs[0] = new Pair<View, String>(topBar, "trans_top_bar");
+                            pairs[1] = new Pair<View, String>(image, "logo_image");
+                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                                ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(Login.this , pairs);
+                                startActivity(intent, options.toBundle());
+                            }
+                        } else {
+                            pass.setError(getString(R.string.error_wrong_password));
+                            pass.requestFocus();
+                        }
+                    } else {
+                        login.setError(getString(R.string.error_wrong_login));
+                        login.requestFocus();
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        } else return;
     }
 }

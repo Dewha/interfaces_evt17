@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "906921687413",
+    "project_id": "eswallet-1244c",
+    "storage_bucket": "eswallet-1244c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:906921687413:android:71e9826acffb8fef483b3c",
+        "android_client_info": {
+          "package_name": "com.example.eswallet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "906921687413-0j61dqelc4ifnoasfl7r571hac1p4c1o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRtVG4RhLfSDhmij_Y9UR8hO-OjQP8bFU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "906921687413-0j61dqelc4ifnoasfl7r571hac1p4c1o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
