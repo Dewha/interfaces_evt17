@@ -4,6 +4,7 @@ import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Pair;
 import android.view.Gravity;
@@ -13,6 +14,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,15 +33,18 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     //variables
     Button btn_day, btn_week, btn_month, btn_year,
             btn_day_ul, btn_week_ul, btn_month_ul,
-            btn_year_ul, btn_costs, btn_income, btn_date;
+            btn_year_ul, btn_costs, btn_income, btn_date, btn_exit;
     ImageButton btn_edit, btn_menu, btn_add;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
     TextView tv_username;
     CardView topBar;
+    ListView cards;
     String fullNameFromDB, login;
-
     boolean isCost = true;
+    public static final String SHARED_PREFS = "sharedPrefs";
+    public static final String LOGIN = "login";
+    public static final String PASSWORD = "password";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +71,10 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         topBar = findViewById(R.id.cv_top_bar);
         btn_add = findViewById(R.id.btn_add);
         btn_date = findViewById(R.id.btn_date);
+        btn_exit = navigationView.getHeaderView(0).findViewById(R.id.btn_exit);
         tv_username = navigationView.getHeaderView(0).findViewById(R.id.tv_username);
+        cards = findViewById(R.id.lv_cards);
+
         //form database
         fullNameFromDB = getIntent().getStringExtra("name") + " " + getIntent().getStringExtra("second_name");
         login = getIntent().getStringExtra("login");
@@ -83,6 +92,14 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 Calendar.getInstance().get(Calendar.MONTH) + "." +
                 Calendar.getInstance().get(Calendar.YEAR);
         btn_date.setText(date);
+
+        String[] categories = new String[] {"category_1","category_2","category_3","category_4","category_5"};
+        String[] comments = new String[] {"comment_1","comment_2","comment_3","comment_4","comment_5"};
+        int[] images = new int[] {R.mipmap.ic_add, R.mipmap.ic_add, R.mipmap.ic_add, R.mipmap.ic_add, R.mipmap.ic_add};
+
+        CustomAdapter customAdapter = new CustomAdapter(Dashboard.this, categories, comments, images);
+        cards.setAdapter(customAdapter);
+
 
         //events
         btn_day.setOnClickListener(this);
@@ -192,7 +209,19 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 }
             }
                 break;
-            case R.id.nav_logout : break;
+            case R.id.nav_logout : {
+                SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putString(LOGIN, "");
+                editor.putString(PASSWORD, "");
+                editor.apply();
+
+                //start login activity
+                Intent intent = new Intent(this, Login.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            } break;
         }
         drawerLayout.closeDrawer(Gravity.LEFT);
         return true;
@@ -215,4 +244,8 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         String date = dayOfMonth + "."  + month + "." + year;
         btn_date.setText(date);
     }
+
+//    public RelativeLayout newRecordPanel() {
+//
+//    }
 }

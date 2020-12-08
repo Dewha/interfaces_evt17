@@ -7,7 +7,8 @@
     tools:context=".Dashboard"
     android:id="@+id/drawer_layout"
     android:fitsSystemWindows="true"
-    tools:openDrawer="right">
+    tools:openDrawer="right"
+    android:background="@color/bone">
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
@@ -202,14 +203,12 @@
         <!-- content header -->
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="10dp"
-            android:paddingBottom="5dp">
+            android:layout_height="wrap_content">
 
             <Button
                 android:id="@+id/btn_date"
                 android:layout_width="wrap_content"
-                android:layout_height="50dp"
+                android:layout_height="25dp"
                 android:background="#00000000"
                 android:textSize="16sp"
                 android:textColor="@color/coal"
@@ -239,15 +238,19 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:paddingLeft="20dp"
-            android:paddingTop="10dp"
             android:paddingRight="20dp"
+            android:paddingTop="10dp"
             android:paddingBottom="20dp">
 
-
-            <ScrollView
+            <ListView
+                android:id="@+id/lv_cards"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"></ScrollView>
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/bone">
+            </ListView>
+
+
 
             <ImageButton
                 android:id="@+id/btn_add"
@@ -255,6 +258,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:background="@mipmap/ic_add"
+                android:layout_marginTop="20dp"
                 android:transitionName="logo_image" />
 
         </LinearLayout>

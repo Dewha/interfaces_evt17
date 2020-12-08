@@ -6,6 +6,7 @@ import androidx.cardview.widget.CardView;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DataSnapshot;
@@ -26,11 +28,18 @@ import com.google.firebase.database.ValueEventListener;
 
 public class Login extends AppCompatActivity implements View.OnClickListener {
 
+    //variables
     Button btn_auth, btn_signup;
     ImageView image;
     TextView hello, desc;
     TextInputLayout login, pass;
     CardView topBar;
+
+    public static final String SHARED_PREFS = "sharedPrefs";
+    public static final String LOGIN = "login";
+    public static final String PASSWORD = "password";
+    private String loadedLogin = "";
+    private String loadedPassword = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,6 +150,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                             String nameFromDB = snapshot.child(userEnteredLogin).child("name").getValue(String.class);
                             String secondNameFromDB = snapshot.child(userEnteredLogin).child("secondName").getValue(String.class);
 
+                            //save login and password
+                            saveUser(loginFromDB, passFromDB);
+
                             //start new activity
                             Intent intent = new Intent(Login.this, Dashboard.class);
                             intent.putExtra("login", loginFromDB);
@@ -170,5 +182,19 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 }
             });
         } else return;
+    }
+
+    public void saveUser(String login, String password) {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(LOGIN, login);
+        editor.putString(PASSWORD, password);
+        editor.commit();
+    }
+
+    public void loadUser() {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+        loadedLogin = sharedPreferences.getString(LOGIN, "");
+        loadedPassword = sharedPreferences.getString(PASSWORD, "");
     }
 }
