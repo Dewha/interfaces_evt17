@@ -1,8 +1,5 @@
 package com.example.eswallet;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.os.Bundle;
@@ -11,19 +8,36 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
-import android.widget.TextView;
+import android.widget.Toast;
 
-import com.google.android.material.button.MaterialButton;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
+
+import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Calendar;
 
 public class NewCost extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, View.OnClickListener {
 
-    Button btn_date;
+    Button btn_date, btn_add;
     ImageButton btn_back;
-    TextView tv;
+    TextInputLayout ti_sum, ti_comment;
     Bundle arguments;
+    FragmentTransaction fragmentTransaction;
+    CostCategoryFragment costCategoryFragment;
+    IncomeCategoryFragment incomeCategoryFragment;
+    DatabaseReference reference;
+    RecordsHelperClass recordsHelperClass;
+    String userLogin;
     boolean isCost;
+    long maxID = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,14 +49,17 @@ public class NewCost extends AppCompatActivity implements DatePickerDialog.OnDat
         //init
         btn_date = findViewById(R.id.btn_date);
         btn_back = findViewById(R.id.btn_back);
-        tv = findViewById(R.id.category);
-
+        btn_add = findViewById(R.id.btn_add);
+        ti_sum = findViewById(R.id.ti_sum_text);
+        ti_comment = findViewById(R.id.ti_comment);
         arguments = getIntent().getExtras();
         isCost = arguments.getBoolean("category");
+        userLogin = getIntent().getStringExtra("login");
 
         //events
         btn_date.setOnClickListener(this);
         btn_back.setOnClickListener(this);
+        btn_add.setOnClickListener(this);
 
         //defaults
         String date = Calendar.getInstance().get(Calendar.DAY_OF_MONTH) + "." +
@@ -50,10 +67,35 @@ public class NewCost extends AppCompatActivity implements DatePickerDialog.OnDat
                 Calendar.getInstance().get(Calendar.YEAR);
         btn_date.setText(date);
 
-        if (isCost)
-            tv.setText("Расход");
-        else
-            tv.setText("Доход");
+        if (isCost) {
+            fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            costCategoryFragment = new CostCategoryFragment();
+            fragmentTransaction.replace(R.id.fragment, costCategoryFragment);
+            fragmentTransaction.commit();
+        }
+        else {
+            fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            incomeCategoryFragment = new IncomeCategoryFragment();
+            fragmentTransaction.replace(R.id.fragment, incomeCategoryFragment);
+            fragmentTransaction.commit();
+        }
+
+        //database
+        reference = FirebaseDatabase.getInstance().getReference().child("users").child(userLogin);
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (isCost){
+                    if (snapshot.child("cost").exists()) maxID = snapshot.child("cost").getChildrenCount(); else maxID = 0;
+                } else {
+                    if (snapshot.child("income").exists()) maxID = snapshot.child("income").getChildrenCount(); else maxID = 0;
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
 
@@ -80,6 +122,42 @@ public class NewCost extends AppCompatActivity implements DatePickerDialog.OnDat
         switch (v.getId()) {
             case R.id.btn_date : showDatePickerDialog(); break;
             case R.id.btn_back : onBackPressed(); break;
+            case R.id.btn_add : {
+                String sumValue = ti_sum.getEditText().getText().toString();
+                if (!sumValue.isEmpty()) {
+                    String date = btn_date.getText().toString();
+                    String comment = ti_comment.getEditText().getText().toString();
+                    if (isCost) {
+                        String category = costCategoryFragment.category;
+                        recordsHelperClass = new RecordsHelperClass(sumValue, category, date, comment);
+                        reference.child("cost").child(String.valueOf(maxID+1)).setValue(recordsHelperClass);
+                        
+
+                    } else {
+                        String category = incomeCategoryFragment.category;
+                        recordsHelperClass = new RecordsHelperClass(sumValue, category, date, comment);
+                        reference.child("income").child(String.valueOf(maxID+1)).setValue(recordsHelperClass);
+                    }
+                    onBackPressed();
+                }
+            }
         }
     }
 }
+
+/*
+
+                    reference = FirebaseDatabase.getInstance().getReference("users");
+                    Query checkUser = reference.orderByChild("login").equalTo(userLogin);
+                    checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            reference.child(userLogin).child("cost").child()
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+ */

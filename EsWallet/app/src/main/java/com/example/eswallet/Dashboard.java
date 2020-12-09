@@ -167,6 +167,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
             case R.id.btn_add: {
                 Intent intent = new Intent(Dashboard.this, NewCost.class);
                 intent.putExtra("category", isCost);
+                intent.putExtra("login", login);
                 Pair[] pairs = new Pair[1];
                 pairs[0] = new Pair<View, String>(topBar, "trans_top_bar");
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {

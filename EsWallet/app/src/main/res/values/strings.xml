@@ -38,4 +38,33 @@
     <string name="date">Дата</string>
     <string name="comment">Комментарий</string>
 
+    <string name="transport">Транспорт</string>
+    <string name="sport">Спорт</string>
+    <string name="family">Семья</string>
+    <string name="products">Продукты</string>
+    <string name="gifts">Подарки</string>
+    <string name="education">Обучение</string>
+    <string name="cafe">Кафе</string>
+    <string name="house">Дом</string>
+    <string name="leisure">Досуг</string>
+    <string name="health">Здоровье</string>
+    <string name="texes">Налоги</string>
+    <string name="serve">Услуги</string>
+    <string name="penalties">Штрафы</string>
+    <string name="auto">Авто</string>
+    <string name="clothes">Одежда</string>
+    <string name="medicine">Медицина</string>
+    <string name="cosmetics">Косметика</string>
+    <string name="job">Работа</string>
+    <string name="debts">Долги</string>
+    <string name="animals">Животные</string>
+    <string name="other">Другое</string>
+    <string name="percent">Проценты</string>
+    <string name="salary">Зарплата</string>
+    <string name="pt_job">Подработка</string>
+    <string name="investments">Инвестиции</string>
+    <string name="rent">Аренда</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

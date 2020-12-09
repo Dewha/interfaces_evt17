@@ -191,10 +191,4 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         editor.putString(PASSWORD, password);
         editor.commit();
     }
-
-    public void loadUser() {
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-        loadedLogin = sharedPreferences.getString(LOGIN, "");
-        loadedPassword = sharedPreferences.getString(PASSWORD, "");
-    }
 }
