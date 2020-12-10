@@ -37,7 +37,6 @@ public class NewCost extends AppCompatActivity implements DatePickerDialog.OnDat
     RecordsHelperClass recordsHelperClass;
     String userLogin;
     boolean isCost;
-    long maxID = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,20 +81,6 @@ public class NewCost extends AppCompatActivity implements DatePickerDialog.OnDat
 
         //database
         reference = FirebaseDatabase.getInstance().getReference().child("users").child(userLogin);
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (isCost){
-                    if (snapshot.child("cost").exists()) maxID = snapshot.child("cost").getChildrenCount(); else maxID = 0;
-                } else {
-                    if (snapshot.child("income").exists()) maxID = snapshot.child("income").getChildrenCount(); else maxID = 0;
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
     }
 
 
@@ -130,13 +115,12 @@ public class NewCost extends AppCompatActivity implements DatePickerDialog.OnDat
                     if (isCost) {
                         String category = costCategoryFragment.category;
                         recordsHelperClass = new RecordsHelperClass(sumValue, category, date, comment);
-                        reference.child("cost").child(String.valueOf(maxID+1)).setValue(recordsHelperClass);
-                        
+                        reference.child("cost").push().setValue(recordsHelperClass);
 
                     } else {
                         String category = incomeCategoryFragment.category;
                         recordsHelperClass = new RecordsHelperClass(sumValue, category, date, comment);
-                        reference.child("income").child(String.valueOf(maxID+1)).setValue(recordsHelperClass);
+                        reference.child("income").push().setValue(recordsHelperClass);
                     }
                     onBackPressed();
                 }
@@ -144,20 +128,3 @@ public class NewCost extends AppCompatActivity implements DatePickerDialog.OnDat
         }
     }
 }
-
-/*
-
-                    reference = FirebaseDatabase.getInstance().getReference("users");
-                    Query checkUser = reference.orderByChild("login").equalTo(userLogin);
-                    checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            reference.child(userLogin).child("cost").child()
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
- */

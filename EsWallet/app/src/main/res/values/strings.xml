@@ -64,7 +64,6 @@
     <string name="pt_job">Подработка</string>
     <string name="investments">Инвестиции</string>
     <string name="rent">Аренда</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="currency">Р</string>
 
 </resources>

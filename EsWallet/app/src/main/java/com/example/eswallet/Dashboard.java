@@ -11,19 +11,27 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class Dashboard extends AppCompatActivity implements View.OnClickListener,
@@ -41,6 +49,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     CardView topBar;
     ListView cards;
     String fullNameFromDB, login;
+    DatabaseReference reference;
     boolean isCost = true;
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String LOGIN = "login";
@@ -75,10 +84,6 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         tv_username = navigationView.getHeaderView(0).findViewById(R.id.tv_username);
         cards = findViewById(R.id.lv_cards);
 
-        //form database
-        fullNameFromDB = getIntent().getStringExtra("name") + " " + getIntent().getStringExtra("second_name");
-        login = getIntent().getStringExtra("login");
-
         //defaults
         btn_day_ul.setBackgroundColor(getResources().getColor(R.color.coal));
         btn_week_ul.setBackgroundColor(getResources().getColor(R.color.bone));
@@ -92,14 +97,6 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 Calendar.getInstance().get(Calendar.MONTH) + "." +
                 Calendar.getInstance().get(Calendar.YEAR);
         btn_date.setText(date);
-
-        String[] categories = new String[] {"category_1","category_2","category_3","category_4","category_5"};
-        String[] comments = new String[] {"comment_1","comment_2","comment_3","comment_4","comment_5"};
-        int[] images = new int[] {R.mipmap.ic_add, R.mipmap.ic_add, R.mipmap.ic_add, R.mipmap.ic_add, R.mipmap.ic_add};
-
-        CustomAdapter customAdapter = new CustomAdapter(Dashboard.this, categories, comments, images);
-        cards.setAdapter(customAdapter);
-
 
         //events
         btn_day.setOnClickListener(this);
@@ -116,8 +113,59 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         //navigation menu
         navigationView.bringToFront();
         navigationView.setNavigationItemSelectedListener(this);
+
+        //form database
+        fullNameFromDB = getIntent().getStringExtra("name") + " " + getIntent().getStringExtra("second_name");
+        login = getIntent().getStringExtra("login");
+
+        //database
+        loadDataFromDB();
     }
 
+    public void showData(Iterable<DataSnapshot> data) {
+        ArrayList<String> comments = new ArrayList<>();
+        ArrayList<String> categories = new ArrayList<>();
+        ArrayList<String> date = new ArrayList<>();
+        ArrayList<Integer> icons = new ArrayList<>();
+        ArrayList<String> ids = new ArrayList<>();
+        for (DataSnapshot dataSnapshot: data) {
+            RecordsHelperClass records = dataSnapshot.getValue(RecordsHelperClass.class);
+            String strCategory = getString(getResources().getIdentifier(records.getCategory(), "string", getPackageName()));
+            categories.add(records.getSum() + " " + getResources().getString(R.string.currency) + " - " + strCategory);
+            comments.add(records.getComment());
+            date.add(records.getDate());
+            icons.add(getResources().getIdentifier("ic_" + records.getCategory(), "mipmap", getPackageName()));
+            ids.add(dataSnapshot.getKey());
+        }
+        CustomAdapter customAdapter = new CustomAdapter(Dashboard.this, categories, comments, date, icons, ids, login, isCost);
+        cards.setAdapter(customAdapter);
+    }
+
+    public void loadDataFromDB() {
+        reference = FirebaseDatabase.getInstance().getReference().child("users").child(login);
+        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (isCost) {
+                    if (snapshot.child("cost").exists()) {
+                        showData(snapshot.child("cost").getChildren());
+                    } else {
+                        cards.setAdapter(null);
+                    }
+                } else {
+                    if (snapshot.child("income").exists()) {
+                        showData(snapshot.child("income").getChildren());
+                    } else {
+                        cards.setAdapter(null);
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
 
     @Override
     public void onClick(View v) {
@@ -150,11 +198,13 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 btn_costs.setTextColor(getResources().getColor(R.color.bone));
                 btn_income.setTextColor(getResources().getColor(R.color.bone_transparent));
                 isCost = true;
+                loadDataFromDB();
             } break;
             case R.id.btn_income: {
                 btn_costs.setTextColor(getResources().getColor(R.color.bone_transparent));
                 btn_income.setTextColor(getResources().getColor(R.color.bone));
                 isCost = false;
+                loadDataFromDB();
             } break;
             case R.id.btn_edit: {
                 //some code 1
@@ -246,7 +296,9 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         btn_date.setText(date);
     }
 
-//    public RelativeLayout newRecordPanel() {
-//
-//    }
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        loadDataFromDB();
+    }
 }
