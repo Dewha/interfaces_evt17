@@ -1,12 +1,14 @@
 package com.example.eswallet;
 
 public class RecordsHelperClass {
-    String sum, category, date, comment;
+    String sum, category, day, month, year, comment;
 
-    public RecordsHelperClass(String sum, String category, String date, String comment) {
+    public RecordsHelperClass(String sum, String category, String day, String month, String year, String comment) {
         this.sum = sum;
         this.category = category;
-        this.date = date;
+        this.day = day;
+        this.month = month;
+        this.year = year;
         this.comment = comment;
     }
 
@@ -21,11 +23,19 @@ public class RecordsHelperClass {
         return category;
     }
 
-    public String getDate() {
-        return date;
-    }
-
     public String getComment() {
         return comment;
+    }
+
+    public String getDay() {
+        return day;
+    }
+
+    public String getMonth() {
+        return month;
+    }
+
+    public String getYear() {
+        return year;
     }
 }

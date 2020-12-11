@@ -26,6 +26,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Objects;
+
 public class Login extends AppCompatActivity implements View.OnClickListener {
 
     //variables
@@ -97,7 +99,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     }
     //validate login data
     private Boolean validateLogin(TextInputLayout login) {
-        String value = login.getEditText().getText().toString();
+        String value = Objects.requireNonNull(login.getEditText()).getText().toString();
         String noWhiteSpaces = "(?=\\S+$)";
         if (value.isEmpty()) {
             login.setError(getString(R.string.error_empty_field));
@@ -116,7 +118,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     }
 
     private Boolean validatePass(TextInputLayout pass) {
-        String value = pass.getEditText().getText().toString();
+        String value = Objects.requireNonNull(pass.getEditText()).getText().toString();
         if (value.isEmpty()) {
             pass.setError(getString(R.string.error_empty_field));
             return false;
@@ -130,8 +132,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     //authorization
     private void loginUser() {
         if (validateLogin(login) & validatePass(pass)) {
-            String userEnteredLogin = login.getEditText().getText().toString().trim();
-            String userEnteredPassword = pass.getEditText().getText().toString().trim();
+            String userEnteredLogin = Objects.requireNonNull(login.getEditText()).getText().toString().trim();
+            String userEnteredPassword = Objects.requireNonNull(pass.getEditText()).getText().toString().trim();
             DatabaseReference reference = FirebaseDatabase.getInstance().getReference("users");
             Query checkUser = reference.orderByChild("login").equalTo(userEnteredLogin);
             checkUser.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -189,6 +191,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(LOGIN, login);
         editor.putString(PASSWORD, password);
-        editor.commit();
+        editor.apply();
     }
 }

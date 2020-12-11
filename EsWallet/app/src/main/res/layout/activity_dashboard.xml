@@ -7,7 +7,7 @@
     tools:context=".Dashboard"
     android:id="@+id/drawer_layout"
     android:fitsSystemWindows="true"
-    tools:openDrawer="right"
+    tools:openDrawer="left"
     android:background="@color/bone">
 
     <com.google.android.material.navigation.NavigationView
@@ -16,7 +16,7 @@
         android:layout_height="match_parent"
         app:headerLayout="@layout/header"
         app:menu="@menu/main_menu"
-        android:layout_gravity="left">
+        android:layout_gravity="start">
 
     </com.google.android.material.navigation.NavigationView>
 

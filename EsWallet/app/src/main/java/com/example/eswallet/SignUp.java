@@ -47,7 +47,7 @@ public class SignUp extends AppCompatActivity {
                 String enteredName = name.getEditText().getText().toString().trim();
                 String enteredSecName = second_name.getEditText().getText().toString().trim();
                 String enteredPassword = pass1.getEditText().getText().toString().trim();
-                UserHelperClass userHelperClass = new UserHelperClass(enteredLogin, enteredName, enteredSecName, enteredPassword);
+                UserHelperClass userHelperClass = new UserHelperClass(enteredLogin, enteredName, enteredSecName, enteredPassword, "0");
 
                 reference = FirebaseDatabase.getInstance().getReference("users");
                 Query checkUser = reference.orderByChild("login").equalTo(enteredLogin);

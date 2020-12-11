@@ -1,15 +1,15 @@
 package com.example.eswallet;
 
 public class UserHelperClass {
-    String login, name, second_name, password;
+    String login, name, second_name, password, sum;
 
-    public UserHelperClass(String login, String name, String second_name, String password) {
+    public UserHelperClass(String login, String name, String second_name, String password, String sum) {
         this.login = login;
         this.name = name;
         this.second_name = second_name;
         this.password = password;
+        this.sum = sum;
     }
-
     public UserHelperClass() {
     }
 
@@ -20,11 +20,16 @@ public class UserHelperClass {
     public String getName() {
         return name;
     }
-    public String getSecondName() {
+
+    public String getSecond_name() {
         return second_name;
     }
 
     public String getPassword() {
         return password;
+    }
+
+    public String getSum() {
+        return sum;
     }
 }

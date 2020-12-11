@@ -21,7 +21,9 @@ public class CustomAdapter extends BaseAdapter {
     private final Context context;
     private final ArrayList<String> categories;
     private final ArrayList<String> comments;
-    private final ArrayList<String> date;
+    private final ArrayList<String> day;
+    private final ArrayList<String> month;
+    private final ArrayList<String> year;
     private final ArrayList<Integer> icons;
     private final ArrayList<String> ids;
     private final String login;
@@ -30,7 +32,9 @@ public class CustomAdapter extends BaseAdapter {
     public CustomAdapter(Context context,
                          ArrayList<String> categories,
                          ArrayList<String> comments,
-                         ArrayList<String> date,
+                         ArrayList<String> day,
+                         ArrayList<String> month,
+                         ArrayList<String> year,
                          ArrayList<Integer> icons,
                          ArrayList<String> ids,
                          String login,
@@ -38,7 +42,9 @@ public class CustomAdapter extends BaseAdapter {
         this.context = context;
         this.categories = categories;
         this.comments = comments;
-        this.date = date;
+        this.day = day;
+        this.month = month;
+        this.year = year;
         this.icons = icons;
         this.ids = ids;
         this.login = login;
@@ -75,14 +81,16 @@ public class CustomAdapter extends BaseAdapter {
         int iconsSet = icons.get(position);
         String categorySet = categories.get(position);
         String commentSet = comments.get(position);
-        String dateSet = date.get(position);
+        String daySet = day.get(position);
+        String monthSet = month.get(position);
+        String yearSet = year.get(position);
         String idSet = ids.get(position);
 
-        if (!(iconsSet < 0 && commentSet == " " && categorySet == " " && dateSet == " ")) {
+        if (!(iconsSet < 0 && commentSet == " " && categorySet == " " && daySet == " " && monthSet == " " && yearSet == " ")) {
             category_icon.setImageResource(iconsSet);
             category_.setText(categorySet);
             comment_.setText(commentSet);
-            date_.setText(dateSet);
+            date_.setText(daySet+"."+monthSet+"."+yearSet);
             category_.setTag(idSet);
         }
 

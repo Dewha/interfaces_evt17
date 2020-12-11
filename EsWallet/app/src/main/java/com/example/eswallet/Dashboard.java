@@ -3,17 +3,22 @@ package com.example.eswallet;
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Pair;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -24,15 +29,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Objects;
+import java.util.zip.Inflater;
 
 public class Dashboard extends AppCompatActivity implements View.OnClickListener,
                                                             NavigationView.OnNavigationItemSelectedListener,
@@ -45,12 +57,14 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     ImageButton btn_edit, btn_menu, btn_add;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
-    TextView tv_username;
+    TextView tv_username, tv_sum, tv_remainder;
     CardView topBar;
     ListView cards;
-    String fullNameFromDB, login;
+    String fullNameFromDB, login, date;
     DatabaseReference reference;
     boolean isCost = true;
+    int periodFilter = 0;
+    int fullSum = 0;
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String LOGIN = "login";
     public static final String PASSWORD = "password";
@@ -80,6 +94,8 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         topBar = findViewById(R.id.cv_top_bar);
         btn_add = findViewById(R.id.btn_add);
         btn_date = findViewById(R.id.btn_date);
+        tv_sum = findViewById(R.id.tv_sum);
+        tv_remainder = findViewById(R.id.tv_remainder_text);
         btn_exit = navigationView.getHeaderView(0).findViewById(R.id.btn_exit);
         tv_username = navigationView.getHeaderView(0).findViewById(R.id.tv_username);
         cards = findViewById(R.id.lv_cards);
@@ -93,10 +109,18 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         btn_income.setTextColor(getResources().getColor(R.color.bone_transparent));
         tv_username.setText(fullNameFromDB);
 
-        String date = Calendar.getInstance().get(Calendar.DAY_OF_MONTH) + "." +
-                Calendar.getInstance().get(Calendar.MONTH) + "." +
+        date = Calendar.getInstance().get(Calendar.DAY_OF_MONTH) + "." +
+                (Calendar.getInstance().get(Calendar.MONTH) + 1) + "." +
                 Calendar.getInstance().get(Calendar.YEAR);
         btn_date.setText(date);
+
+        //form database
+        fullNameFromDB = getIntent().getStringExtra("name") + " " + getIntent().getStringExtra("second_name");
+        login = getIntent().getStringExtra("login");
+
+
+        //database
+        loadDataFromDB();
 
         //events
         btn_day.setOnClickListener(this);
@@ -113,58 +137,115 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         //navigation menu
         navigationView.bringToFront();
         navigationView.setNavigationItemSelectedListener(this);
+    }
 
-        //form database
-        fullNameFromDB = getIntent().getStringExtra("name") + " " + getIntent().getStringExtra("second_name");
-        login = getIntent().getStringExtra("login");
-
-        //database
-        loadDataFromDB();
+    public void setCustomAdapter(RecordsHelperClass records,
+                                 DataSnapshot dataSnapshot,
+                                 ArrayList<String> comments,
+                                 ArrayList<String> categories,
+                                 ArrayList<String> day,
+                                 ArrayList<String> month,
+                                 ArrayList<String> year,
+                                 ArrayList<Integer> icons,
+                                 ArrayList<String> ids) {
+        String strCategory = getString(getResources().getIdentifier(records.getCategory(), "string", getPackageName()));
+        categories.add(records.getSum() + " " + getResources().getString(R.string.currency) + " - " + strCategory);
+        comments.add(records.getComment());
+        day.add(records.getDay());
+        month.add(records.getMonth());
+        year.add(records.getYear());
+        icons.add(getResources().getIdentifier("ic_" + records.getCategory(), "mipmap", getPackageName()));
+        ids.add(dataSnapshot.getKey());
+        fullSum += Integer.parseInt(records.getSum());
     }
 
     public void showData(Iterable<DataSnapshot> data) {
         ArrayList<String> comments = new ArrayList<>();
         ArrayList<String> categories = new ArrayList<>();
-        ArrayList<String> date = new ArrayList<>();
+        ArrayList<String> day = new ArrayList<>();
+        ArrayList<String> month = new ArrayList<>();
+        ArrayList<String> year = new ArrayList<>();
         ArrayList<Integer> icons = new ArrayList<>();
         ArrayList<String> ids = new ArrayList<>();
+        String[] _date = date.split("[.]");
+        fullSum = 0;
         for (DataSnapshot dataSnapshot: data) {
             RecordsHelperClass records = dataSnapshot.getValue(RecordsHelperClass.class);
-            String strCategory = getString(getResources().getIdentifier(records.getCategory(), "string", getPackageName()));
-            categories.add(records.getSum() + " " + getResources().getString(R.string.currency) + " - " + strCategory);
-            comments.add(records.getComment());
-            date.add(records.getDate());
-            icons.add(getResources().getIdentifier("ic_" + records.getCategory(), "mipmap", getPackageName()));
-            ids.add(dataSnapshot.getKey());
+            assert records != null;
+            switch (periodFilter) {
+                case 0: {
+                    if (records.getDay().equals(_date[0]) && records.getMonth().equals(_date[1]) && records.getYear().equals(_date[2])) {
+                        setCustomAdapter(records, dataSnapshot, comments, categories, day, month, year, icons, ids);
+                    }
+                } break;
+                case 1: {
+                    int dbDay = Integer.parseInt(records.getDay()), _day = Integer.parseInt(_date[0]);
+                    if (dbDay>=_day-7&&dbDay<=_day&&records.getMonth().equals(_date[1]) && records.getYear().equals(_date[2])) {
+                        setCustomAdapter(records, dataSnapshot, comments, categories, day, month, year, icons, ids);
+                    }
+                } break;
+                case 2: {
+                    if (records.getMonth().equals(_date[1])&&records.getYear().equals(_date[2])) {
+                        setCustomAdapter(records, dataSnapshot, comments, categories, day, month, year, icons, ids);
+                    }
+                } break;
+                case 3: {
+                    if (records.getYear().equals(_date[2])) {
+                        setCustomAdapter(records, dataSnapshot, comments, categories, day, month, year, icons, ids);
+                    }
+                } break;
+            }
         }
-        CustomAdapter customAdapter = new CustomAdapter(Dashboard.this, categories, comments, date, icons, ids, login, isCost);
+        String _fullSum = fullSum + " " + getResources().getString(R.string.currency);
+        tv_sum.setText(_fullSum);
+        CustomAdapter customAdapter = new CustomAdapter(Dashboard.this, categories, comments, day, month, year, icons, ids, login, isCost);
         cards.setAdapter(customAdapter);
+        updateSum();
     }
 
-    public void loadDataFromDB() {
-        reference = FirebaseDatabase.getInstance().getReference().child("users").child(login);
-        reference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (isCost) {
-                    if (snapshot.child("cost").exists()) {
-                        showData(snapshot.child("cost").getChildren());
-                    } else {
-                        cards.setAdapter(null);
-                    }
-                } else {
-                    if (snapshot.child("income").exists()) {
-                        showData(snapshot.child("income").getChildren());
-                    } else {
-                        cards.setAdapter(null);
-                    }
-                }
+    ValueEventListener valueEventListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+            if (snapshot.exists()) {
+                showData(snapshot.getChildren());
+            } else {
+                cards.setAdapter(null);
             }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+        }
 
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+
+        }
+    };
+
+    public void loadDataFromDB() {
+        Query query;
+        if (isCost) {
+            query = FirebaseDatabase.getInstance().getReference("users").child(login).child("cost");
+        } else {
+            query = FirebaseDatabase.getInstance().getReference("users").child(login).child("income");
+        }
+        query.addListenerForSingleValueEvent(valueEventListener);
+        updateSum();
+    }
+
+    ValueEventListener onUpdateSum = new ValueEventListener() {
+        @Override
+        public void onDataChange(@NonNull DataSnapshot snapshot) {
+            if (snapshot.exists()){
+                tv_remainder.setText(snapshot.getValue(String.class));
             }
-        });
+        }
+
+        @Override
+        public void onCancelled(@NonNull DatabaseError error) {
+
+        }
+    };
+    public void updateSum() {
+        Query query = FirebaseDatabase.getInstance().getReference("users").child(login).child("sum");
+        query.addListenerForSingleValueEvent(onUpdateSum);
     }
 
     @Override
@@ -175,24 +256,32 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 btn_week_ul.setBackgroundColor(getResources().getColor(R.color.bone));
                 btn_month_ul.setBackgroundColor(getResources().getColor(R.color.bone));
                 btn_year_ul.setBackgroundColor(getResources().getColor(R.color.bone));
+                periodFilter = 0;
+                loadDataFromDB();
             } break;
             case R.id.btn_week: {
                 btn_day_ul.setBackgroundColor(getResources().getColor(R.color.bone));
                 btn_week_ul.setBackgroundColor(getResources().getColor(R.color.coal));
                 btn_month_ul.setBackgroundColor(getResources().getColor(R.color.bone));
                 btn_year_ul.setBackgroundColor(getResources().getColor(R.color.bone));
+                periodFilter = 1;
+                loadDataFromDB();
             } break;
             case R.id.btn_month: {
                 btn_day_ul.setBackgroundColor(getResources().getColor(R.color.bone));
                 btn_week_ul.setBackgroundColor(getResources().getColor(R.color.bone));
                 btn_month_ul.setBackgroundColor(getResources().getColor(R.color.coal));
                 btn_year_ul.setBackgroundColor(getResources().getColor(R.color.bone));
+                periodFilter = 2;
+                loadDataFromDB();
             } break;
             case R.id.btn_year: {
                 btn_day_ul.setBackgroundColor(getResources().getColor(R.color.bone));
                 btn_week_ul.setBackgroundColor(getResources().getColor(R.color.bone));
                 btn_month_ul.setBackgroundColor(getResources().getColor(R.color.bone));
                 btn_year_ul.setBackgroundColor(getResources().getColor(R.color.coal));
+                periodFilter = 3;
+                loadDataFromDB();
             } break;
             case R.id.btn_costs: {
                 btn_costs.setTextColor(getResources().getColor(R.color.bone));
@@ -207,7 +296,34 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 loadDataFromDB();
             } break;
             case R.id.btn_edit: {
-                //some code 1
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(R.string.sum);
+                final EditText sumInput = new EditText(Dashboard.this);
+                sumInput.setInputType(InputType.TYPE_CLASS_NUMBER);
+                builder.setView(sumInput);
+                builder.setPositiveButton("OK", (dialog, which) -> {
+                    reference = FirebaseDatabase.getInstance().getReference().child("users").child(login);
+                    Query query = reference.child("sum");
+                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.exists()){
+                                HashMap<String, Object> hashMap = new HashMap<>();
+                                hashMap.put("sum", sumInput.getText().toString());
+                                reference.updateChildren(hashMap).addOnSuccessListener(aVoid -> { });
+                                updateSum();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                });
+                builder.setNegativeButton("Cancel", (dialog, which) -> {
+                });
+                builder.show();
             } break;
             case R.id.btn_menu: {
                 if (!drawerLayout.isDrawerOpen(Gravity.LEFT))
@@ -225,7 +341,9 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                     startActivity(intent, options.toBundle());
                 }
             } break;
-            case R.id.btn_date: showDatePickerDialog(); break;
+            case R.id.btn_date: {
+                showDatePickerDialog();
+            } break;
         }
     }
 
@@ -292,8 +410,10 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        String date = dayOfMonth + "."  + month + "." + year;
+        String date = dayOfMonth + "."  + (month + 1) + "." + year;
         btn_date.setText(date);
+        this.date = date;
+        loadDataFromDB();
     }
 
     @Override
