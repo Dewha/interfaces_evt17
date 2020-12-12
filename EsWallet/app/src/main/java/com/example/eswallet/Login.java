@@ -40,8 +40,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String LOGIN = "login";
     public static final String PASSWORD = "password";
-    private String loadedLogin = "";
-    private String loadedPassword = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,7 +148,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                             //collect data from db to variables
                             String loginFromDB = snapshot.child(userEnteredLogin).child("login").getValue(String.class);
                             String nameFromDB = snapshot.child(userEnteredLogin).child("name").getValue(String.class);
-                            String secondNameFromDB = snapshot.child(userEnteredLogin).child("secondName").getValue(String.class);
+                            String secondNameFromDB = snapshot.child(userEnteredLogin).child("second_name").getValue(String.class);
 
                             //save login and password
                             saveUser(loginFromDB, passFromDB);
@@ -183,7 +181,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
                 }
             });
-        } else return;
+        }
     }
 
     public void saveUser(String login, String password) {

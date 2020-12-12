@@ -116,37 +116,30 @@ public class NewCost extends AppCompatActivity implements DatePickerDialog.OnDat
                     String comment = ti_comment.getEditText().getText().toString();
                     if (isCost) {
                         String category = CostCategoryFragment.category;
-
                         recordsHelperClass = new RecordsHelperClass(sumValue, category, date[0], date[1], date[2], comment);
                         reference.child("cost").push().setValue(recordsHelperClass);
 
+                        Query query = reference.child("sum");
+                        query.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if (snapshot.exists()){
+                                    String sumFromDB = snapshot.getValue(String.class);
+                                    HashMap<String, Object> hashMap = new HashMap<>();
+                                    assert sumFromDB != null;
+                                    String newSum = String.valueOf(Integer.parseInt(sumFromDB)-Integer.parseInt(sumValue));
+                                    hashMap.put("sum", newSum);
+                                    reference.updateChildren(hashMap).addOnSuccessListener(aVoid -> { });
+                                }
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) { }
+                        });
                     } else {
                         String category = IncomeCategoryFragment.category;
                         recordsHelperClass = new RecordsHelperClass(sumValue, category, date[0], date[1], date[2], comment);
                         reference.child("income").push().setValue(recordsHelperClass);
                     }
-                    Query query = reference.child("sum");
-                    query.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if (snapshot.exists()){
-                                String sumFromDB = snapshot.getValue(String.class);
-                                HashMap<String, Object> hashMap = new HashMap<>();
-                                assert sumFromDB != null;
-                                String newSum = String.valueOf(Integer.parseInt(sumFromDB)-Integer.parseInt(sumValue));
-                                hashMap.put("sum", newSum);
-                                reference.updateChildren(hashMap).addOnSuccessListener(aVoid -> {
-
-                                });
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
-
                     onBackPressed();
                 }
             }

@@ -31,12 +31,16 @@
     <string name="profile">Профиль</string>
     <string name="about">О программе</string>
     <string name="remainder">Остаток</string>
-    <string name="total">Всего</string>
+    <string name="current_remainder">Текущий остаток</string>
+    <string name="total_cost">Всего расходов</string>
+    <string name="total_income">Всего доходов</string>
     <string name="new_record">Добавить операцию</string>
     <string name="sum">Сумма</string>
     <string name="add">Добавить</string>
     <string name="date">Дата</string>
     <string name="comment">Комментарий</string>
+    <string name="ok">ОК</string>
+    <string name="cancel">Отмена</string>
 
     <string name="transport">Транспорт</string>
     <string name="sport">Спорт</string>

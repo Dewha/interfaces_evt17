@@ -7,10 +7,33 @@
     android:gravity="bottom"
     android:padding="20dp">
 
-    <ImageView
+    <RelativeLayout
+        android:id="@+id/iv_profile"
         android:layout_width="75dp"
         android:layout_height="75dp"
-        android:src="@mipmap/ic_launcher_round"/>
+        android:layout_toEndOf="@+id/btn_back"
+        android:layout_centerVertical="true">
+
+        <ImageView
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:src="@mipmap/ic_name_background"
+            android:layout_centerVertical="true"/>
+
+        <TextView
+            android:id="@+id/tv_name_first_letter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="-3dp"
+            android:textAlignment="center"
+            android:background="#00000000"
+            android:text="A"
+            android:textColor="@color/coal"
+            android:textSize="58sp"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
     
     <TextView
         android:id="@+id/tv_username"
@@ -37,6 +60,7 @@
             android:textSize="14sp"
             android:textColor="@color/bone"/>
         <TextView
+            android:id="@+id/tv_nv_remainder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="10000р"

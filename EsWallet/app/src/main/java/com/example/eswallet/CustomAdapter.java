@@ -86,20 +86,20 @@ public class CustomAdapter extends BaseAdapter {
         String yearSet = year.get(position);
         String idSet = ids.get(position);
 
-        if (!(iconsSet < 0 && commentSet == " " && categorySet == " " && daySet == " " && monthSet == " " && yearSet == " ")) {
+        if (!(iconsSet < 0 && commentSet.equals(" ") && categorySet.equals(" ") && daySet.equals(" ") && monthSet.equals(" ") && yearSet.equals(" "))) {
             category_icon.setImageResource(iconsSet);
             category_.setText(categorySet);
             comment_.setText(commentSet);
-            date_.setText(daySet+"."+monthSet+"."+yearSet);
+            String fullDate = daySet+"."+monthSet+"."+yearSet;
+            date_.setText(fullDate);
             category_.setTag(idSet);
         }
 
-        ImageButton btn_delete = (ImageButton) convertView.findViewById(R.id.btn_del);
+        ImageButton btn_delete = convertView.findViewById(R.id.btn_del);
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child("users").child(login);
         btn_delete.setOnClickListener(v -> {
             if (isCost) {
                 reference.child("cost").child(category_.getTag().toString()).removeValue();
-
             } else {
                 reference.child("income").child(category_.getTag().toString()).removeValue();
             }

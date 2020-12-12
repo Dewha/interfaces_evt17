@@ -57,7 +57,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     ImageButton btn_edit, btn_menu, btn_add;
     DrawerLayout drawerLayout;
     NavigationView navigationView;
-    TextView tv_username, tv_sum, tv_remainder;
+    TextView tv_username, tv_sum, tv_remainder, tv_nv_remainder, tv_first_letter;
     CardView topBar;
     ListView cards;
     String fullNameFromDB, login, date;
@@ -98,29 +98,31 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         tv_remainder = findViewById(R.id.tv_remainder_text);
         btn_exit = navigationView.getHeaderView(0).findViewById(R.id.btn_exit);
         tv_username = navigationView.getHeaderView(0).findViewById(R.id.tv_username);
+        tv_nv_remainder = navigationView.getHeaderView(0).findViewById(R.id.tv_nv_remainder);
+        tv_first_letter = navigationView.getHeaderView(0).findViewById(R.id.tv_name_first_letter);
         cards = findViewById(R.id.lv_cards);
 
+        //form database
+        fullNameFromDB = getIntent().getStringExtra("name") + " " + getIntent().getStringExtra("second_name");
+        login = getIntent().getStringExtra("login");
+        //database
+        loadDataFromDB();
+
         //defaults
-        btn_day_ul.setBackgroundColor(getResources().getColor(R.color.coal));
-        btn_week_ul.setBackgroundColor(getResources().getColor(R.color.bone));
-        btn_month_ul.setBackgroundColor(getResources().getColor(R.color.bone));
-        btn_year_ul.setBackgroundColor(getResources().getColor(R.color.bone));
-        btn_costs.setTextColor(getResources().getColor(R.color.bone));
-        btn_income.setTextColor(getResources().getColor(R.color.bone_transparent));
+        btn_day_ul.setBackgroundResource(R.color.coal);
+        btn_day_ul.setBackgroundResource(R.color.coal);
+        btn_week_ul.setBackgroundResource(R.color.bone);
+        btn_month_ul.setBackgroundResource(R.color.bone);
+        btn_year_ul.setBackgroundResource(R.color.bone);
+        btn_costs.setTextColor(getResources().getColor(R.color.bone, null));
+        btn_income.setTextColor(getResources().getColor(R.color.bone_transparent, null));
         tv_username.setText(fullNameFromDB);
+        tv_first_letter.setText(fullNameFromDB.substring(0,1).toUpperCase());
 
         date = Calendar.getInstance().get(Calendar.DAY_OF_MONTH) + "." +
                 (Calendar.getInstance().get(Calendar.MONTH) + 1) + "." +
                 Calendar.getInstance().get(Calendar.YEAR);
         btn_date.setText(date);
-
-        //form database
-        fullNameFromDB = getIntent().getStringExtra("name") + " " + getIntent().getStringExtra("second_name");
-        login = getIntent().getStringExtra("login");
-
-
-        //database
-        loadDataFromDB();
 
         //events
         btn_day.setOnClickListener(this);
@@ -200,7 +202,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         tv_sum.setText(_fullSum);
         CustomAdapter customAdapter = new CustomAdapter(Dashboard.this, categories, comments, day, month, year, icons, ids, login, isCost);
         cards.setAdapter(customAdapter);
-        updateSum();
+        updateRemainder();
     }
 
     ValueEventListener valueEventListener = new ValueEventListener() {
@@ -210,6 +212,8 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 showData(snapshot.getChildren());
             } else {
                 cards.setAdapter(null);
+                String _sum = "0 " + getString(R.string.currency);
+                tv_sum.setText(_sum);
             }
         }
 
@@ -227,14 +231,20 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
             query = FirebaseDatabase.getInstance().getReference("users").child(login).child("income");
         }
         query.addListenerForSingleValueEvent(valueEventListener);
-        updateSum();
+        updateRemainder();
     }
 
-    ValueEventListener onUpdateSum = new ValueEventListener() {
+    ValueEventListener onUpdateRemainder = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
             if (snapshot.exists()){
-                tv_remainder.setText(snapshot.getValue(String.class));
+                String newRemainder = snapshot.getValue(String.class) + " " +  getString(R.string.currency);
+                tv_remainder.setText(newRemainder);
+                tv_nv_remainder.setText(newRemainder);
+            } else {
+                String newRemainder = "0 " + getString(R.string.currency);
+                tv_remainder.setText(newRemainder);
+                tv_nv_remainder.setText(newRemainder);
             }
         }
 
@@ -243,9 +253,10 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
         }
     };
-    public void updateSum() {
+
+    public void updateRemainder() {
         Query query = FirebaseDatabase.getInstance().getReference("users").child(login).child("sum");
-        query.addListenerForSingleValueEvent(onUpdateSum);
+        query.addListenerForSingleValueEvent(onUpdateRemainder);
     }
 
     @Override
@@ -301,7 +312,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 final EditText sumInput = new EditText(Dashboard.this);
                 sumInput.setInputType(InputType.TYPE_CLASS_NUMBER);
                 builder.setView(sumInput);
-                builder.setPositiveButton("OK", (dialog, which) -> {
+                builder.setPositiveButton(R.string.ok, (dialog, which) -> {
                     reference = FirebaseDatabase.getInstance().getReference().child("users").child(login);
                     Query query = reference.child("sum");
                     query.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -311,19 +322,17 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                                 HashMap<String, Object> hashMap = new HashMap<>();
                                 hashMap.put("sum", sumInput.getText().toString());
                                 reference.updateChildren(hashMap).addOnSuccessListener(aVoid -> { });
-                                updateSum();
+                                updateRemainder();
                             }
                         }
-
                         @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
+                        public void onCancelled(@NonNull DatabaseError error) { }
                     });
                 });
-                builder.setNegativeButton("Cancel", (dialog, which) -> {
+                builder.setNegativeButton(R.string.cancel, (dialog, which) -> {
                 });
                 builder.show();
+
             } break;
             case R.id.btn_menu: {
                 if (!drawerLayout.isDrawerOpen(Gravity.LEFT))

@@ -85,25 +85,27 @@ public class MainActivity extends AppCompatActivity {
     ValueEventListener valueEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
-            //collect data from db to variables
-            String loginFromDB = snapshot.child(loadedLogin).child("login").getValue(String.class);
-            String nameFromDB = snapshot.child(loadedLogin).child("name").getValue(String.class);
-            String secondNameFromDB = snapshot.child(loadedLogin).child("secondName").getValue(String.class);
-            //start new activity
-            new Handler().postDelayed(() -> {
-                Intent intent = new Intent(MainActivity.this, Dashboard.class);
-                intent.putExtra("login", loginFromDB);
-                intent.putExtra("name", nameFromDB);
-                intent.putExtra("second_name", secondNameFromDB);
+            if (snapshot.exists()){
+                //collect data from db to variables
+                String loginFromDB = snapshot.child(loadedLogin).child("login").getValue(String.class);
+                String nameFromDB = snapshot.child(loadedLogin).child("name").getValue(String.class);
+                String secondNameFromDB = snapshot.child(loadedLogin).child("second_name").getValue(String.class);
+                //start new activity
+                new Handler().postDelayed(() -> {
+                    Intent intent = new Intent(MainActivity.this, Dashboard.class);
+                    intent.putExtra("login", loginFromDB);
+                    intent.putExtra("name", nameFromDB);
+                    intent.putExtra("second_name", secondNameFromDB);
 
-                Pair[] pairs = new Pair[2];
-                pairs[0] = new Pair<View, String>(topBar, "trans_top_bar");
-                pairs[1] = new Pair<View, String>(image, "logo_image");
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, pairs);
-                    startActivity(intent, options.toBundle());
-                }
-            },SPLACH_SCREEN);
+                    Pair[] pairs = new Pair[2];
+                    pairs[0] = new Pair<View, String>(topBar, "trans_top_bar");
+                    pairs[1] = new Pair<View, String>(image, "logo_image");
+                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(MainActivity.this, pairs);
+                        startActivity(intent, options.toBundle());
+                    }
+                },SPLACH_SCREEN);
+            }
         }
 
         @Override

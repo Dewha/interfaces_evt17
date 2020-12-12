@@ -70,10 +70,7 @@ public class SignUp extends AppCompatActivity {
 
                     }
                 });
-
-
             }
-            else return;
         };
 
         View.OnClickListener onBtnAlreadyHaveAccountClick = v -> SignUp.super.onBackPressed();
