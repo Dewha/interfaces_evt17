@@ -111,7 +111,7 @@ public class NewCost extends AppCompatActivity implements DatePickerDialog.OnDat
             case R.id.btn_back : onBackPressed(); break;
             case R.id.btn_add : {
                 String sumValue = ti_sum.getEditText().getText().toString();
-                if (!sumValue.isEmpty()) {
+                if (!sumValue.isEmpty()&&sumValue.length()<19) {
                     String[] date = btn_date.getText().toString().split("[.]");
                     String comment = ti_comment.getEditText().getText().toString();
                     if (isCost) {
@@ -127,7 +127,7 @@ public class NewCost extends AppCompatActivity implements DatePickerDialog.OnDat
                                     String sumFromDB = snapshot.getValue(String.class);
                                     HashMap<String, Object> hashMap = new HashMap<>();
                                     assert sumFromDB != null;
-                                    String newSum = String.valueOf(Integer.parseInt(sumFromDB)-Integer.parseInt(sumValue));
+                                    String newSum = String.valueOf(Long.parseLong(sumFromDB)-Long.parseLong(sumValue));
                                     hashMap.put("sum", newSum);
                                     reference.updateChildren(hashMap).addOnSuccessListener(aVoid -> { });
                                 }

@@ -6,6 +6,7 @@ import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Pair;
@@ -64,7 +65,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     DatabaseReference reference;
     boolean isCost = true;
     int periodFilter = 0;
-    int fullSum = 0;
+    long fullSum = 0;
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String LOGIN = "login";
     public static final String PASSWORD = "password";
@@ -158,7 +159,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         year.add(records.getYear());
         icons.add(getResources().getIdentifier("ic_" + records.getCategory(), "mipmap", getPackageName()));
         ids.add(dataSnapshot.getKey());
-        fullSum += Integer.parseInt(records.getSum());
+        fullSum += Long.parseLong(records.getSum());
     }
 
     public void showData(Iterable<DataSnapshot> data) {
@@ -259,56 +260,51 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         query.addListenerForSingleValueEvent(onUpdateRemainder);
     }
 
+    public void changeBtnColors(Button btn1, Button btn2, Button btn3, Button btn4) {
+        btn1.setBackgroundResource(R.color.coal);
+        btn2.setBackgroundResource(R.color.bone);
+        btn3.setBackgroundResource(R.color.bone);
+        btn4.setBackgroundResource(R.color.bone);
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_day: {
-                btn_day_ul.setBackgroundColor(getResources().getColor(R.color.coal));
-                btn_week_ul.setBackgroundColor(getResources().getColor(R.color.bone));
-                btn_month_ul.setBackgroundColor(getResources().getColor(R.color.bone));
-                btn_year_ul.setBackgroundColor(getResources().getColor(R.color.bone));
+                changeBtnColors(btn_day_ul, btn_week_ul, btn_month_ul, btn_year_ul);
                 periodFilter = 0;
                 loadDataFromDB();
             } break;
             case R.id.btn_week: {
-                btn_day_ul.setBackgroundColor(getResources().getColor(R.color.bone));
-                btn_week_ul.setBackgroundColor(getResources().getColor(R.color.coal));
-                btn_month_ul.setBackgroundColor(getResources().getColor(R.color.bone));
-                btn_year_ul.setBackgroundColor(getResources().getColor(R.color.bone));
+                changeBtnColors(btn_week_ul, btn_day_ul, btn_month_ul, btn_year_ul);
                 periodFilter = 1;
                 loadDataFromDB();
             } break;
             case R.id.btn_month: {
-                btn_day_ul.setBackgroundColor(getResources().getColor(R.color.bone));
-                btn_week_ul.setBackgroundColor(getResources().getColor(R.color.bone));
-                btn_month_ul.setBackgroundColor(getResources().getColor(R.color.coal));
-                btn_year_ul.setBackgroundColor(getResources().getColor(R.color.bone));
+                changeBtnColors(btn_month_ul, btn_day_ul, btn_week_ul, btn_year_ul);
                 periodFilter = 2;
                 loadDataFromDB();
             } break;
             case R.id.btn_year: {
-                btn_day_ul.setBackgroundColor(getResources().getColor(R.color.bone));
-                btn_week_ul.setBackgroundColor(getResources().getColor(R.color.bone));
-                btn_month_ul.setBackgroundColor(getResources().getColor(R.color.bone));
-                btn_year_ul.setBackgroundColor(getResources().getColor(R.color.coal));
+                changeBtnColors(btn_year_ul, btn_day_ul, btn_week_ul, btn_month_ul);
                 periodFilter = 3;
                 loadDataFromDB();
             } break;
             case R.id.btn_costs: {
-                btn_costs.setTextColor(getResources().getColor(R.color.bone));
-                btn_income.setTextColor(getResources().getColor(R.color.bone_transparent));
+                btn_costs.setTextColor(getColor(R.color.bone));
+                btn_income.setTextColor(getColor(R.color.bone_transparent));
                 isCost = true;
                 loadDataFromDB();
             } break;
             case R.id.btn_income: {
-                btn_costs.setTextColor(getResources().getColor(R.color.bone_transparent));
-                btn_income.setTextColor(getResources().getColor(R.color.bone));
+                btn_costs.setTextColor(getColor(R.color.bone_transparent));
+                btn_income.setTextColor(getColor(R.color.bone));
                 isCost = false;
                 loadDataFromDB();
             } break;
             case R.id.btn_edit: {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(R.string.sum);
+                builder.setTitle(R.string.new_remainder);
                 final EditText sumInput = new EditText(Dashboard.this);
                 sumInput.setInputType(InputType.TYPE_CLASS_NUMBER);
                 builder.setView(sumInput);
@@ -329,8 +325,7 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                         public void onCancelled(@NonNull DatabaseError error) { }
                     });
                 });
-                builder.setNegativeButton(R.string.cancel, (dialog, which) -> {
-                });
+                builder.setNegativeButton(R.string.cancel, (dialog, which) -> { });
                 builder.show();
 
             } break;
@@ -372,8 +367,15 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.nav_home : onBackPressed(); break;
-            case R.id.nav_about :
-                startActivity(new Intent(Dashboard.this, About.class));
+            case R.id.nav_about : {
+                Intent intent = new Intent(Dashboard.this, About.class);
+                Pair[] pairs = new Pair[1];
+                pairs[0] = new Pair<View, String>(topBar, "trans_top_bar");
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(Dashboard.this , pairs);
+                    startActivity(intent, options.toBundle());
+                }
+            }
                 break;
             case R.id.nav_profile : {
                 Intent intent = new Intent(Dashboard.this, UserProfile.class);
@@ -398,7 +400,12 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 Intent intent = new Intent(this, Login.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
+                Pair[] pairs = new Pair[1];
+                pairs[0] = new Pair<View, String>(topBar, "trans_top_bar");
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                    ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(Dashboard.this , pairs);
+                    startActivity(intent, options.toBundle());
+                }
             } break;
         }
         drawerLayout.closeDrawer(Gravity.LEFT);

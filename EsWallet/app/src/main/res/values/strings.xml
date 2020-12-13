@@ -32,6 +32,7 @@
     <string name="about">О программе</string>
     <string name="remainder">Остаток</string>
     <string name="current_remainder">Текущий остаток</string>
+    <string name="new_remainder">Новый остаток</string>
     <string name="total_cost">Всего расходов</string>
     <string name="total_income">Всего доходов</string>
     <string name="new_record">Добавить операцию</string>
@@ -69,5 +70,41 @@
     <string name="investments">Инвестиции</string>
     <string name="rent">Аренда</string>
     <string name="currency">Р</string>
+
+
+    <string name="about_description">Приложение предназначено
+        для учета личных расходов и доходов,
+        а также оценки общего финансового состояния.
+        Это отличный инструмент для желающих держать
+        под контролем свои личные финансы.</string>
+
+    <string name="about_what_does_it_do">Основные функции и особенности:</string>
+    <string name="about_what_does_it_do_list_1">- планирование бюджета;</string>
+    <string name="about_what_does_it_do_list_2">- посчет суммарных расходов и доходов;</string>
+    <string name="about_what_does_it_do_list_3">- распределение по категориям на любой случай;</string>
+    <string name="about_what_does_it_do_list_4">- фильтр по периоду времени;</string>
+    <string name="about_what_does_it_do_list_5">- доступ к данным с любого устройства.</string>
+
+    <string name="about_how_to_work">Как работать с приложением.</string>
+    <string name="about_how_to_work_text1">Для начала необходимо зарегистрироваться и авторизоваться.
+        Приложение запомнит пользователя и при следующем запуске
+        приложения авторизация будет происходить автоматически </string>
+    <string name="about_how_to_work_text2">
+        Необходимо выбрать вид операции: расход или доход.
+        В зависимости от выбора все сохраненные записи (если они есть) будут автоматически подгружается и отображается
+        записи отображаются за определенный период: день, неделя, месяц, год.
+        Если нажать на дату, то появится окно с выбором даты. </string>
+    <string name="about_how_to_work_text3">Добавить операцию можно нажав на кнопку в правом нижнем углу экрана.
+        в появившемся окне необходимо ввести сумму, выбрать категорию и дату операции.
+        При необходимости можно добавить комментарий.
+        Чтобы завершить создание записи нужно нажать на кнопке добавить.
+        После этого созданная операция появится в списке. </string>
+    <string name="about_how_to_work_text4">При необходимости можно удалить запись,
+        нажав на крестик справа от нее.</string>
+    <string name="about_made_by1">Приложение разработано в рамках курсовой работы по дисциплине
+        "Интерфейсы информационных и автоматизированных систем"
+        студентами Щербининым А.В., Колосовым И.С. Соломатиным А.А. </string>
+    <string name="about_made_by2">ЛФ ПНИПУ группа ЭВТ-17-1б</string>
+    <string name="about_made_by3">2020 год.</string>
 
 </resources>

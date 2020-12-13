@@ -251,8 +251,6 @@
                 android:background="@color/bone">
             </ListView>
 
-
-
             <ImageButton
                 android:id="@+id/btn_add"
                 android:layout_width="wrap_content"

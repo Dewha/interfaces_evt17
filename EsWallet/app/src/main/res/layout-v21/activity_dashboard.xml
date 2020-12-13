@@ -73,7 +73,7 @@
                     android:layout_width="41dp"
                     android:layout_height="41dp"
                     android:layout_alignBottom="@+id/tv_remainder_text"
-                    android:layout_toRightOf="@+id/tv_remainder_text"
+                    android:layout_toEndOf="@+id/tv_remainder_text"
                     android:background="@mipmap/ic_edit" />
 
                 <LinearLayout
@@ -87,7 +87,7 @@
                         android:id="@+id/btn_costs"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="25dp"
+                        android:layout_marginEnd="25dp"
                         android:background="#00000000"
                         android:text="@string/costs"
                         android:textSize="18sp" />
@@ -96,7 +96,7 @@
                         android:id="@+id/btn_income"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="25dp"
+                        android:layout_marginStart="25dp"
                         android:background="#00000000"
                         android:text="@string/income"
                         android:textSize="18sp" />
@@ -246,7 +246,7 @@
             <ListView
                 android:id="@+id/lv_cards"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_weight="1"
                 android:background="@color/bone">
             </ListView>
@@ -257,7 +257,7 @@
                 android:id="@+id/btn_add"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
+                android:layout_gravity="end"
                 android:background="@mipmap/ic_add"
                 android:layout_marginTop="20dp"
                 android:transitionName="logo_image" />
