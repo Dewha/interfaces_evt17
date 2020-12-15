@@ -74,7 +74,8 @@
                     android:layout_height="41dp"
                     android:layout_alignBottom="@+id/tv_remainder_text"
                     android:layout_toEndOf="@+id/tv_remainder_text"
-                    android:background="@mipmap/ic_edit" />
+                    android:background="@mipmap/ic_edit"
+                    android:layout_toRightOf="@+id/tv_remainder_text" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -90,7 +91,8 @@
                         android:layout_marginEnd="25dp"
                         android:background="#00000000"
                         android:text="@string/costs"
-                        android:textSize="18sp" />
+                        android:textSize="18sp"
+                        android:layout_marginRight="25dp" />
 
                     <Button
                         android:id="@+id/btn_income"
@@ -99,7 +101,8 @@
                         android:layout_marginStart="25dp"
                         android:background="#00000000"
                         android:text="@string/income"
-                        android:textSize="18sp" />
+                        android:textSize="18sp"
+                        android:layout_marginLeft="25dp" />
                 </LinearLayout>
 
             </RelativeLayout>

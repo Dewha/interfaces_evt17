@@ -12,7 +12,8 @@
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_toEndOf="@+id/btn_back"
-        android:layout_centerVertical="true">
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/btn_back">
 
         <ImageView
             android:layout_width="75dp"
@@ -31,7 +32,8 @@
             android:text="A"
             android:textColor="@color/coal"
             android:textSize="58sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:gravity="center_horizontal" />
 
     </RelativeLayout>
     
@@ -40,7 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="24sp"
-        android:text="123"
+        android:text="name second_name"
         android:textColor="@color/bone"/>
 
     <LinearLayout
@@ -63,7 +65,7 @@
             android:id="@+id/tv_nv_remainder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="10000р"
+            android:text="0"
             android:textSize="14sp"
             android:textColor="@color/bone"/>
     </LinearLayout>

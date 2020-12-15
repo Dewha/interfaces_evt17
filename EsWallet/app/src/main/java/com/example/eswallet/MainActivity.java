@@ -37,9 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static final String SHARED_PREFS = "sharedPrefs";
     public static final String LOGIN = "login";
-    public static final String PASSWORD = "password";
     private String loadedLogin = "";
-    private String loadedPassword = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         logo.startAnimation(bottomAnim);
 
         loadUser();
-        if (loadedLogin.isEmpty() || loadedPassword.isEmpty()) {
+        if (loadedLogin.isEmpty()) {
             new Handler().postDelayed(() -> {
                 Intent intent = new Intent(MainActivity.this, Login.class);
                 Pair[] pairs = new Pair[3];
@@ -79,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
     public void loadUser() {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         loadedLogin = sharedPreferences.getString(LOGIN, "");
-        loadedPassword = sharedPreferences.getString(PASSWORD, "");
     }
 
     ValueEventListener valueEventListener = new ValueEventListener() {

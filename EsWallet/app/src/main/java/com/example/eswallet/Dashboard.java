@@ -3,36 +3,28 @@ package com.example.eswallet;
 import android.app.ActivityOptions;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Pair;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,12 +32,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import java.time.Month;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Objects;
-import java.util.zip.Inflater;
 
 public class Dashboard extends AppCompatActivity implements View.OnClickListener,
                                                             NavigationView.OnNavigationItemSelectedListener,
@@ -115,8 +104,8 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         btn_week_ul.setBackgroundResource(R.color.bone);
         btn_month_ul.setBackgroundResource(R.color.bone);
         btn_year_ul.setBackgroundResource(R.color.bone);
-        btn_costs.setTextColor(getResources().getColor(R.color.bone, null));
-        btn_income.setTextColor(getResources().getColor(R.color.bone_transparent, null));
+        btn_costs.setTextColor(getResources().getColor(R.color.bone));
+        btn_income.setTextColor(getResources().getColor(R.color.bone_transparent));
         tv_username.setText(fullNameFromDB);
         tv_first_letter.setText(fullNameFromDB.substring(0,1).toUpperCase());
 
@@ -291,14 +280,14 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                 loadDataFromDB();
             } break;
             case R.id.btn_costs: {
-                btn_costs.setTextColor(getColor(R.color.bone));
-                btn_income.setTextColor(getColor(R.color.bone_transparent));
+                btn_costs.setTextColor(getResources().getColor(R.color.bone));
+                btn_income.setTextColor(getResources().getColor(R.color.bone_transparent));
                 isCost = true;
                 loadDataFromDB();
             } break;
             case R.id.btn_income: {
-                btn_costs.setTextColor(getColor(R.color.bone_transparent));
-                btn_income.setTextColor(getColor(R.color.bone));
+                btn_costs.setTextColor(getResources().getColor(R.color.bone_transparent));
+                btn_income.setTextColor(getResources().getColor(R.color.bone));
                 isCost = false;
                 loadDataFromDB();
             } break;
@@ -316,9 +305,11 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             if (snapshot.exists()){
                                 HashMap<String, Object> hashMap = new HashMap<>();
-                                hashMap.put("sum", sumInput.getText().toString());
-                                reference.updateChildren(hashMap).addOnSuccessListener(aVoid -> { });
-                                updateRemainder();
+                                if (!sumInput.getText().toString().isEmpty()) {
+                                    hashMap.put("sum", sumInput.getText().toString());
+                                    reference.updateChildren(hashMap).addOnSuccessListener(aVoid -> { });
+                                    updateRemainder();
+                                }
                             }
                         }
                         @Override

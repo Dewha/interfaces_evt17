@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".About"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/bone">
 
     <!-- top bar -->
     <androidx.cardview.widget.CardView
@@ -30,12 +31,14 @@
                 android:id="@+id/tv_new_record"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/new_record"
+                android:text="@string/about"
                 android:textColor="@color/bone"
                 android:textSize="18sp"
                 android:layout_toRightOf="@+id/btn_back"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"/>
+                android:layout_marginLeft="10dp"
+                android:layout_toEndOf="@+id/btn_back"
+                android:layout_marginStart="10dp" />
 
         </RelativeLayout>
 
@@ -45,12 +48,14 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="20dp">
+        android:padding="20dp"
+        android:background="@color/bone">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/bone">
 
             <TextView
                 android:layout_width="match_parent"
@@ -59,7 +64,8 @@
                 android:textColor="@color/coal"
                 android:textSize="32sp"
                 android:textAlignment="center"
-                android:paddingBottom="20dp"/>
+                android:paddingBottom="20dp"
+                android:gravity="center_horizontal" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -68,7 +74,8 @@
                 android:textColor="@color/coal"
                 android:textSize="20sp"
                 android:textAlignment="center"
-                android:paddingBottom="20dp"/>
+                android:paddingBottom="20dp"
+                android:gravity="center_horizontal" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -77,7 +84,8 @@
                 android:textColor="@color/coal"
                 android:textSize="24sp"
                 android:textAlignment="center"
-                android:paddingBottom="10dp"/>
+                android:paddingBottom="10dp"
+                android:gravity="center_horizontal" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -86,7 +94,8 @@
                 android:textColor="@color/coal"
                 android:textSize="20sp"
                 android:textAlignment="viewStart"
-                android:paddingBottom="5dp"/>
+                android:paddingBottom="5dp"
+                android:gravity="start" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -94,7 +103,8 @@
                 android:textColor="@color/coal"
                 android:textSize="20sp"
                 android:textAlignment="viewStart"
-                android:paddingBottom="5dp"/>
+                android:paddingBottom="5dp"
+                android:gravity="start" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -102,7 +112,8 @@
                 android:textColor="@color/coal"
                 android:textSize="20sp"
                 android:textAlignment="viewStart"
-                android:paddingBottom="5dp"/>
+                android:paddingBottom="5dp"
+                android:gravity="start" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -110,7 +121,8 @@
                 android:textColor="@color/coal"
                 android:textSize="20sp"
                 android:textAlignment="viewStart"
-                android:paddingBottom="5dp"/>
+                android:paddingBottom="5dp"
+                android:gravity="start" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -119,7 +131,8 @@
                 android:textColor="@color/coal"
                 android:textSize="20sp"
                 android:textAlignment="viewStart"
-                android:paddingBottom="20dp"/>
+                android:paddingBottom="20dp"
+                android:gravity="start" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -128,7 +141,8 @@
                 android:textColor="@color/coal"
                 android:textSize="24sp"
                 android:textAlignment="center"
-                android:paddingBottom="10dp"/>
+                android:paddingBottom="10dp"
+                android:gravity="center_horizontal" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -136,7 +150,8 @@
                 android:textColor="@color/coal"
                 android:textSize="20sp"
                 android:textAlignment="viewStart"
-                android:paddingBottom="5dp"/>
+                android:paddingBottom="5dp"
+                android:gravity="start" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -144,7 +159,8 @@
                 android:textColor="@color/coal"
                 android:textSize="20sp"
                 android:textAlignment="viewStart"
-                android:paddingBottom="5dp"/>
+                android:paddingBottom="5dp"
+                android:gravity="start" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -152,7 +168,8 @@
                 android:textColor="@color/coal"
                 android:textSize="20sp"
                 android:textAlignment="viewStart"
-                android:paddingBottom="5dp"/>
+                android:paddingBottom="5dp"
+                android:gravity="start" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -160,7 +177,8 @@
                 android:textColor="@color/coal"
                 android:textSize="20sp"
                 android:textAlignment="viewStart"
-                android:paddingBottom="10dp"/>
+                android:paddingBottom="10dp"
+                android:gravity="start" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -168,7 +186,8 @@
                 android:textColor="@color/coal"
                 android:textSize="20sp"
                 android:textAlignment="viewStart"
-                android:paddingBottom="10dp"/>
+                android:paddingBottom="10dp"
+                android:gravity="start" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -176,7 +195,8 @@
                 android:textColor="@color/coal"
                 android:textSize="20sp"
                 android:textAlignment="center"
-                android:paddingBottom="5dp"/>
+                android:paddingBottom="5dp"
+                android:gravity="center_horizontal" />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -184,7 +204,8 @@
                 android:textColor="@color/coal"
                 android:textSize="20sp"
                 android:textAlignment="center"
-                android:paddingBottom="5dp"/>
+                android:paddingBottom="5dp"
+                android:gravity="center_horizontal" />
 
         </LinearLayout>
 
